@@ -17,7 +17,7 @@ Current Version : 1.1
 
 Version  1.0: 
 [=Login part=]
-Normal log in function. Can not handle slide bar of www.taoao.com.(Because slide bar of www.taoao.com is really different from normal ones, it can seemingly detect whether you are a robot or human.)
+Normal log in function. Can not handle slide bar of www.taoao.com (Because the slide bar of www.taoao.com is infamously different from normal ones, it can seemingly detect whether you are a robot or human.)
 [=Data store part=]
 Not supported yet.
 [=Data analysis part=]
