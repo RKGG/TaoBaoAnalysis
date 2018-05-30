@@ -178,7 +178,6 @@ class TaoBao:
 class MySqlDBStore:
     # To use Mysql you must FIRST CREATE the the DATABASE and the TABLE you would like to store data in !!!
     # In my project I use the TABLE taobaoanalysis in DATABASE usualdata to store my data.
-    #
 
     def __init__(self, user, pswd):
         self.user = user

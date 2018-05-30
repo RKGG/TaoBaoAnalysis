@@ -25,7 +25,7 @@ Not supported yet. This version only shows you the data it gets. Data analysis f
 
 Version 1.1:
 [=Data store part=]
-implement data store via MySql, but you need first create a TABLE in mysql like:
+Implement data store via MySql, but you need first create a TABLE in mysql like:
 mysql> create table taobaoanalysis(
     -> id int NOT NULL AUTO_INCREMENT,
     -> bought_date char(20) NOT NULL,
