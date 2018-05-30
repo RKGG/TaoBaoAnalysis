@@ -13,7 +13,7 @@ mytaobao = taobao.TaoBao("YourTaoBaoAccount", "YourPassword")
 With your only account and password and run this script.
 
 ===ABOUT VERSION===
-Current Version : 1.0
+Current Version : 1.1
 
 Version  1.0: 
 [=Login part=]
@@ -22,3 +22,20 @@ Normal log in function. Can not handle slide bar of www.taoao.com.(Because slide
 Not supported yet.
 [=Data analysis part=]
 Not supported yet. This version only shows you the data it gets. Data analysis functions like data visualization may be added in the next version.
+
+Version 1.1:
+[=Data store part=]
+implement data store via MySql, but you need first create a TABLE in mysql like:
+mysql> create table taobaoanalysis(
+    -> id int NOT NULL AUTO_INCREMENT,
+    -> bought_date char(20) NOT NULL,
+    -> item_names char(50),
+    -> bought_prices char(10),
+    -> primary key(id)
+    -> )character set = utf8;
+After the program ran, you can use " SELECT * FROM taobaoanalysis; " in mysql command line to see the result.
+
+Next Version May Improve:
+1. Set the waiting time more proper in class TaoBao.
+2. More safer mysql operation, check data before store in case of redundancies.
+3. Support for more file format store, like .txt, .excel ...

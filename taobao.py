@@ -8,8 +8,8 @@ import pymysql
 
 
 def show_info():
-    info = "Version-1.0 \
-    Time-2018.5.23 \
+    info = "Version-1.1 \
+    Time-2018.5.30 \
     two bugs: \
     1. verify the slide bar. \
     2. even if the slide bar be verified, the click to the button seems wrong."
@@ -132,13 +132,15 @@ class TaoBao:
                 return 0  # login succeed
         return -1   # login fail
 
-    def go_to_and_do(self, bought_dates, item_names, bought_prices):
+    def perform(self, bought_dates, item_names, bought_prices):
+        starttime = time.time()
+
         self.common_click(self.driver.find_element_by_link_text("我的淘宝"))
-        time.sleep(5)
+        time.sleep(2)
         # driver.find_element_by_link_text("已买到的宝贝").click()
         self.driver.find_element_by_id("bought").click()
         # common_click(driver, driver.find_element_by_link_text("已买到的宝贝"))
-        time.sleep(3)
+        time.sleep(2)
         bought_dates_obj = self.driver.find_elements_by_class_name("bought-wrapper-mod__create-time___yNWVS")
         # bought_dates = []
         for bought_date_obj in bought_dates_obj:
@@ -167,23 +169,46 @@ class TaoBao:
                 break
 
         for i in range(len(bought_dates)):
-            print(bought_dates[i] + ": " + item_names[i] + " " + bought_prices[i] + " Yuan.")
+            print(bought_dates[i] + " : " + item_names[i] + " " + bought_prices[i] + " Yuan.")
+
+        endtime = time.time()
+        print("Peform time cost:" + str(endtime - starttime))
 
 
-class MysqlStore:
+class MySqlDBStore:
+    # To use Mysql you must FIRST CREATE the the DATABASE and the TABLE you would like to store data in !!!
+    # In my project I use the TABLE taobaoanalysis in DATABASE usualdata to store my data.
+    #
 
-    def __inin__(self, user, pswd):
+    def __init__(self, user, pswd):
         self.user = user
         self.pswd = pswd
 
     def login(self):
-        connect = pymysql.connect(host='127.0.0.1', unix_socket='/tmp/mysql.sock', user=self.user, passwd=self.pswd,
-                                  db='mysql')
-        self.cursor = connect.cursor()
+        self.connect = pymysql.connect(host='127.0.0.1', unix_socket='/tmp/mysql.sock', user=self.user, passwd=self.pswd,
+                                  db='mysql', charset="utf8mb4")   #, autocommit=True
+        # self.cursor = self.connect.cursor()
 
     def execute(self, cmd):
-        self.cursor.execute(cmd)
-        print(self.cursor.fetchall())
+        self.connect.cursor().execute(cmd)
+        print(self.connect.cursor().fetchall())
 
-    def main(self):
-        self.cursor.execute("show databases")
+    def store(self,bought_dates,item_names,bought_prices):
+        records = []
+        for i in range(len(bought_dates)):
+            record = []
+            record.append(str(bought_dates[i]))
+            record.append(str(item_names[i]))
+            record.append(str(bought_prices[i]))
+            records.append(record)
+        self.connect.cursor().execute("use usualdata")  # must use self.connect.cursor() instead of self.cursor !!
+        with self.connect.cursor() as cursor:
+            #  cursor.executemany("insert into test(prop, val) values (%s, %s)", vals)
+            cmd = "insert into taobaoanalysis(id,bought_date,item_name,bought_price) values(NULL,%s,%s,%s)"
+            cursor.executemany(cmd, records)
+            self.connect.commit()
+
+
+
+
+
