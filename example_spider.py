@@ -10,7 +10,7 @@ mysql = taobao.MySqlDBStore("YourDatabaseAccount","YourDatabasePassword")   # ro
 bought_dates = []
 item_names = []
 bought_prices = []
-if mytaobao.login(2) == 0: # 2 means try 2 times
+if mytaobao.login(2) == 0:  # 2 means try 2 times
     time.sleep(1)
     mytaobao.perform(bought_dates, item_names, bought_prices)
     mysql.login()
