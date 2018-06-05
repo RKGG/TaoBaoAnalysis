@@ -5,6 +5,7 @@ import time
 import random
 from selenium.webdriver.common.action_chains import ActionChains
 import pymysql
+import openpyxl
 
 
 def show_info():
@@ -208,6 +209,44 @@ class MySqlDBStore:
             self.connect.commit()
 
 
+class Store:
+
+    def __init__(self, form = "txt"):
+        self.form = form
+
+    def txtstore(self, data, name="store/taobao.txt"):
+        f = open(name, 'r')
+        line_num = 0
+        for line in f:
+            line_num+=1
+        print("lines: " + str(line_num) + "\n")
+        f.close()
+        f = open(name, 'w')
+        f.write("Revise time: "+str(time.asctime(time.localtime(time.time()))) + "\n")
+        for i in range(len(data)):
+            f.write(str(i+1))
+            f.write("==")
+            f.write(data[i][0])
+            f.write("==")
+            f.write(data[i][1])
+            f.write("==")
+            f.write(data[i][2])
+            f.write("\n")
+        f.close()
+
+    def excelstore(self, data, name="store/taobao.xlsx"):
+        xlsx = openpyxl.Workbook()
+        newsheet = xlsx.active
+        for i in range(len((data))):
+            newsheet.cell(row=i+1, column=1, value=data[i][0])  # .value = newss_date
+            newsheet.cell(row=i+1, column=2, value=data[i][1])
+            newsheet.cell(row=i+1, column=3, value=data[i][2])
+            # print(news_date, news_content)
+        xlsx.save(name)
 
 
-
+if __name__ == "__main__":
+    data = [["2018-04-27","中国电信官方旗舰店浙江手机充值100元电信话费直充快充电信充值","99.80"],["2018-05-27","8MHZ晶振 HC-49SMD 2脚贴片 假贴 8M","61.06"]]
+    store = Store()
+    store.txtstore(data)
+    store.excelstore(data)
