@@ -13,7 +13,8 @@ mytaobao = taobao.TaoBao("YourTaoBaoAccount", "YourPassword")
 With your only account and password and run this script.
 
 ===ABOUT VERSION===
-Current Version : 1.1
+Current Version : 1.2
+
 
 Version  1.0: 
 [=Login part=]
@@ -22,6 +23,7 @@ Normal log in function. Can not handle slide bar of www.taoao.com (Because the s
 Not supported yet.
 [=Data analysis part=]
 Not supported yet. This version only shows you the data it gets. Data analysis functions like data visualization may be added in the next version.
+
 
 Version 1.1:
 [=Data store part=]
@@ -39,3 +41,17 @@ Next Version May Improve:
 1. Set the waiting time more proper in class TaoBao.
 2. More safer mysql operation, check data before store in case of redundancies.
 3. Support for more file format store, like .txt, .excel ...
+
+
+Version 1.2:
+[=Login part=]
+Cut down some unnecessary waiting time.
+[=Data store part=]
+Implement data store via txt and excel, you can use like:
+    store = taobao.Store()
+    store.txtstore(data)
+    store.excelstore(data)
+Next Version May Improve:
+1. More safer mysql operation, check data before store in case of redundancies.
+2. Support for your whole account data analysis.
+3. Variable pass improvement.
