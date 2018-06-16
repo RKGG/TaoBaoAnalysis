@@ -55,3 +55,11 @@ Next Version May Improve:
 1. More safer mysql operation, check data before store in case of redundancies.
 2. Support for your whole account data analysis.
 3. Variable pass improvement.
+
+Version 1.3:
+Facing fatal problem:
+When use Selenium open Taobao login page, the server of taobao will recognize me as a robot even ifI just use Selenium
+Webdriver to open the login website(www.login.taobao.com) and type the username and password by my hand and slide the
+slide bar by hand. Which means the moment I open the website via Python Selenium program, the taobao server recognizes me
+as a spider and want to block me no matter latter operations are done by true human or robot. It actually didn't detect
+whether I am a robot or human by slide bar or other.

@@ -6,6 +6,8 @@ import random
 from selenium.webdriver.common.action_chains import ActionChains
 import pymysql
 import openpyxl
+import requests
+from bs4 import BeautifulSoup
 
 
 def show_info():
@@ -17,13 +19,27 @@ def show_info():
     print(info)
 
 
+def taobao_request_login():
+    params = {"TPL_username": "treasershere", "TPL_password": "1996818321lusio"}
+    taobao = requests.post("https://login.taobao.com/member/login.jhtml?spm=a21bo.2017.201864-2.d1.5af911d9a1ABPg&f=top&redirectURL=http%3A%2F%2Fwww.taobao.com%2F",data=params)
+    print("Cookie is set to: ")
+    print(taobao.cookies.get_dict())
+    print("--------------------------------------")
+    print("Going to list_bought_items page...")
+    list_bought_items = requests.get("https://buyertrade.taobao.com/trade/itemlist/list_bought_items.htm?spm=a1z02.1.a2109.d1000368.584d782dIjzjZv&nekot=1470211439694", cookies=taobao.cookies)
+    # print(list_bought_items.content)
+    print("--------------------------------------")
+    bs = BeautifulSoup(list_bought_items.content, "html.parser")   # list_bought_items.text
+    print(bs.prettify())
+
+
 class TaoBao:
 
     def __init__(self, username, password):
         self.username = username
         self.password = password
-        self.url = "http://www.taobao.com"
-        self.driver = webdriver.Firefox()
+        self.url = "https://login.taobao.com/" # http://www.taobao.com
+        self.driver = webdriver.Firefox()  # Firefox
         self.service_args = [
             # '--proxy=218.241.30.187:8123',
             # '--proxy-type=http',
@@ -48,9 +64,9 @@ class TaoBao:
         slide_action.reset_actions()
         # slide_action.reset_actions()
         # slide_action.move_by_offset(400, 0).perform()
-        valper = 100 * random.random()
+        valper = 100 * random.random()  # valper = 100 * random.random()
         total = 0
-        while total < 400:
+        while total < 260:  # 400 其实好像是258
             try:
                 slide_action.move_by_offset(valper, 0).perform()  # 平行移动鼠标
                 total += valper
@@ -77,20 +93,33 @@ class TaoBao:
         actions.perform()
         time.sleep(sleeptime)
 
+    def login_by_hand(self, maxtimes=1):
+        starttime = time.time()
+        self.driver.implicitly_wait(3)
+        self.driver.get(self.url)  # https://tieba.baidu.com/index.html?nu_token=4b8a703069686a352a64346a246472652cb0
+        # pswd_login = self.driver.find_element_by_link_text("密码登录")
+        # self.common_click(pswd_login)
+        time.sleep(1)
+        cmd = input("=_=...\n")
+        if cmd == "go":
+            return 0
+        else:
+            return -1
+
     def login(self, maxtimes=1):
         starttime = time.time()
         self.driver.implicitly_wait(3)
         self.driver.get(self.url)  # https://tieba.baidu.com/index.html?nu_token=4b8a703069686a352a64346a246472652cb0
-        print("cookies before login: ")
-        print(self.driver.get_cookies())
-        time.sleep(3)
-        pre_login_button = self.driver.find_element_by_link_text("亲，请登录")
-        print(pre_login_button)
-        self.common_click(pre_login_button)
-        time.sleep(2)
+        #print("cookies before login: ")
+        #print(self.driver.get_cookies())
+        time.sleep(2) #
+        # pre_login_button = self.driver.find_element_by_link_text("亲，请登录")
+        # print(pre_login_button)
+        # self.common_click(pre_login_button)
+        # time.sleep(1)
         pswd_login = self.driver.find_element_by_link_text("密码登录")
         self.common_click(pswd_login)
-        time.sleep(2)
+        time.sleep(1)
         i = 0
         while i < maxtimes:
             print("Try to login for the " + str(i + 1) + " th time.")
@@ -102,11 +131,12 @@ class TaoBao:
             userpswd_txt.clear()
             self.common_click(userpswd_txt)
             self.send_keys_slowly(userpswd_txt, self.password)
+            time.sleep(2)
             # When finishing tpying your username and password, there are two situations:
             try:  # 1 there being a slide bar
                 self.find_and_perform_slide_bar()
             except:
-                print("Maybe sth. wrong with slide bar....")
+                print("Maybe sth. wrong with slide bar..")
                 try:  # 2 there being no slide bar, but may have a refresh button to generate a slide bar.
                     refresh_button = self.driver.find_element_by_link_text("刷新")
                     self.common_click(refresh_button)
@@ -114,22 +144,22 @@ class TaoBao:
                     time.sleep(1)
                     self.find_and_perform_slide_bar()
                 except:  # no refreshing button & no slide bar, we can just easily submit !
-                    print("-Because no slide bar to verify.")
+                    print("-Because no slide bar to verify!")
 
-            print("Finish above and then try to submit.....")
-
+            print("Try to submit...")
             login_button = self.driver.find_element_by_id("J_SubmitStatic")
             self.common_click(login_button)
-            print("Clicked the sign_in button.")
+            print("Already clicked the sign-in button.")
 
             try:
                 self.driver.find_element_by_id("TPL_username_1")
+                print("Login failed once!")
             except:
-                print("Login Taobao successfully!")
+                print("Login successfully!")
                 endtime = time.time()
                 print("Login time cost:" + str(endtime - starttime))
-                print("cookies after login: ")
-                print(self.driver.get_cookies())
+                #print("cookies after login: ")
+                #print(self.driver.get_cookies())
                 return 0  # login succeed
         return -1   # login fail
 
@@ -174,6 +204,12 @@ class TaoBao:
 
         endtime = time.time()
         print("Peform time cost:" + str(endtime - starttime))
+        data = []
+        for i in range(len(bought_dates)):
+            data[i] = []
+            data[i][0] = bought_dates[i]
+            data[i][0] = item_names[i]
+            data[i][0] = bought_prices[i]
 
 
 class MySqlDBStore:
@@ -250,3 +286,4 @@ if __name__ == "__main__":
     store = Store()
     store.txtstore(data)
     store.excelstore(data)
+    taobao_request_login()
