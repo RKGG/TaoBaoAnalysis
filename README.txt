@@ -63,3 +63,8 @@ Webdriver to open the login website(www.login.taobao.com) and type the username 
 slide bar by hand. Which means the moment I open the website via Python Selenium program, the taobao server recognizes me
 as a spider and want to block me no matter latter operations are done by true human or robot. It actually didn't detect
 whether I am a robot or human by slide bar or other.
+More infomation at : https://stackoverflow.com/questions/33225947/can-a-website-detect-when-you-are-using-selenium-with-chromedriver
+However, changing the webdriver code didn't work for me. Therefore the only way to achieve this project is to use taobao official API.
+But to use taobao API you need to have a company account first.
+Under such unfortunate, I decide that this project will be suspended for a while.
+

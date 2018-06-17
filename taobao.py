@@ -35,11 +35,21 @@ def taobao_request_login():
 
 class TaoBao:
 
-    def __init__(self, username, password):
+    def __init__(self, username, password, browser="Firefox"):
         self.username = username
         self.password = password
         self.url = "https://login.taobao.com/" # http://www.taobao.com
-        self.driver = webdriver.Firefox()  # Firefox
+        self.baiduurl = "https://www.baidu.com"
+        chrome_options = webdriver.ChromeOptions()
+        chrome_options.add_argument('headless')
+        # chrome_options.add_argument('window-size=1920x1080')
+        #self.driver = webdriver.Chrome(options=chrome_options)  # failed even use headless browser
+        if browser == "Firefox":
+            self.driver = webdriver.Firefox()  # Firefox
+        else:
+            self.driver = webdriver.Chrome()
+        self.driver.maximize_window()
+        #self.driver = webdriver.PhantomJS(executable_path="/Users/treasersmac/programming/python/TaoBaoAnalysis/phantomjs-2.1.1-macosx/bin/phantomjs")
         self.service_args = [
             # '--proxy=218.241.30.187:8123',
             # '--proxy-type=http',
@@ -94,12 +104,12 @@ class TaoBao:
         time.sleep(sleeptime)
 
     def login_by_hand(self, maxtimes=1):
-        starttime = time.time()
-        self.driver.implicitly_wait(3)
-        self.driver.get(self.url)  # https://tieba.baidu.com/index.html?nu_token=4b8a703069686a352a64346a246472652cb0
+        #starttime = time.time()
+        #self.driver.implicitly_wait(3)
+        #self.driver.get(self.baiduurl)  # https://tieba.baidu.com/index.html?nu_token=4b8a703069686a352a64346a246472652cb0
         # pswd_login = self.driver.find_element_by_link_text("密码登录")
         # self.common_click(pswd_login)
-        time.sleep(1)
+        #time.sleep(1)
         cmd = input("=_=...\n")
         if cmd == "go":
             return 0
