@@ -20,7 +20,7 @@ def show_info():
 
 
 def taobao_request_login():
-    params = {"TPL_username": "treasershere", "TPL_password": "1996818321lusio"}
+    params = {"TPL_username": "YourTaoBaoAccount", "TPL_password": "YourPassword"}
     taobao = requests.post("https://login.taobao.com/member/login.jhtml?spm=a21bo.2017.201864-2.d1.5af911d9a1ABPg&f=top&redirectURL=http%3A%2F%2Fwww.taobao.com%2F",data=params)
     print("Cookie is set to: ")
     print(taobao.cookies.get_dict())
