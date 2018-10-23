@@ -18,21 +18,6 @@ def show_info():
     2. even if the slide bar be verified, the click to the button seems wrong."
     print(info)
 
-
-def taobao_request_login():
-    params = {"TPL_username": "YourTaoBaoAccount", "TPL_password": "YourPassword"}
-    taobao = requests.post("https://login.taobao.com/member/login.jhtml?spm=a21bo.2017.201864-2.d1.5af911d9a1ABPg&f=top&redirectURL=http%3A%2F%2Fwww.taobao.com%2F",data=params)
-    print("Cookie is set to: ")
-    print(taobao.cookies.get_dict())
-    print("--------------------------------------")
-    print("Going to list_bought_items page...")
-    list_bought_items = requests.get("https://buyertrade.taobao.com/trade/itemlist/list_bought_items.htm?spm=a1z02.1.a2109.d1000368.584d782dIjzjZv&nekot=1470211439694", cookies=taobao.cookies)
-    # print(list_bought_items.content)
-    print("--------------------------------------")
-    bs = BeautifulSoup(list_bought_items.content, "html.parser")   # list_bought_items.text
-    print(bs.prettify())
-
-
 class TaoBao:
 
     def __init__(self, username, password, browser="Firefox"):
